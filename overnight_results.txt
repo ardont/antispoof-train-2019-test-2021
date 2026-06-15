@@ -1,0 +1,39 @@
+====================================================
+        ASVspoof 2021 LA OVERNIGHT RESULTS SUMMARY  
+====================================================
+
+--- MFCC Models Evaluation ---
+Processed 174000/181566 lines... Extracted 97771 features.
+Processed 176000/181566 lines... Extracted 98884 features.
+Processed 178000/181566 lines... Extracted 100018 features.
+Processed 180000/181566 lines... Extracted 101142 features.
+Features extracted and cached successfully.
+Evaluation set shape: X=(101921, 630), y=(101921,)
+
+--- Evaluating XGBoost (augmented) ---
+ASVspoof 2021 EER: 17.78%
+
+--- Evaluating LightGBM (augmented) ---
+ASVspoof 2021 EER: 17.97%
+
+--- Evaluating CatBoost (augmented) ---
+ASVspoof 2021 EER: 19.30%
+
+--- LFCC Models Evaluation ---
+Processed 174000/181566 lines... Extracted 97771 features.
+Processed 176000/181566 lines... Extracted 98884 features.
+Processed 178000/181566 lines... Extracted 100018 features.
+Processed 180000/181566 lines... Extracted 101142 features.
+LFCC features extracted and cached successfully.
+Evaluation set shape (LFCC): X=(101921, 420), y=(101921,)
+
+--- Evaluating XGBoost (augmented LFCC) ---
+ASVspoof 2021 EER (LFCC): 21.71%
+
+--- Evaluating LightGBM (augmented LFCC) ---
+ASVspoof 2021 EER (LFCC): 21.77%
+
+--- Evaluating CatBoost (augmented LFCC) ---
+ASVspoof 2021 EER (LFCC): 22.96%
+
+--- Ensemble Evaluation ---

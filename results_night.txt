@@ -1,0 +1,3 @@
+LightGBM (MFCC20+stats): 8.40%
+XGBoost (MFCC20+stats): 8.36%
+MLP (MFCC20+stats): 9.18%

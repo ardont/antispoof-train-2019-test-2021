@@ -41,14 +41,16 @@ eval_lfcc_2021_subset_cache.pkl
 catboost_info/
 
 # Keep models and scalers for local out-of-the-box run
-# !lgb_model_augmented.pkl
-# !xgb_model_augmented.json
-# !cat_model_augmented.cbm
-# !lgb_model_lfcc_augmented.pkl
-# !xgb_model_lfcc_augmented.json
-# !cat_model_lfcc_augmented.cbm
-# !scaler.pkl
-# !scaler_lfcc.pkl
+!lgb_model_augmented.pkl
+!xgb_model_augmented.json
+!cat_model_augmented.cbm
+!lgb_model_lfcc_augmented.pkl
+!xgb_model_lfcc_augmented.json
+!cat_model_lfcc_augmented.cbm
+!scaler.pkl
+!scaler_lfcc.pkl
+
+data_cache.pkl
 
 # IDEs
 .idea/
