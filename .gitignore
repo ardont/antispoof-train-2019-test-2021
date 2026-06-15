@@ -38,6 +38,8 @@ catboost_info/
 *_robust.json
 *_robust.cbm
 stacking_meta_model*.pkl
+data_payload.zip
+*.zip
 
 # Keep models and scalers for local out-of-the-box run
 !lgb_model_augmented.pkl
