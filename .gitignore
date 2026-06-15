@@ -30,15 +30,14 @@ coverage.xml
 
 # Data and Cache files (very large)
 data/
-augmented_data_cache.pkl
-augmented_data_cache_subset.pkl
-augmented_lfcc_data_cache.pkl
-augmented_lfcc_data_cache_subset.pkl
-eval_2021_cache.pkl
-eval_lfcc_2021_cache.pkl
-eval_2021_subset_cache.pkl
-eval_lfcc_2021_subset_cache.pkl
+*cache*.pkl
+robust_*
+eval_robust_*
 catboost_info/
+*_robust.pkl
+*_robust.json
+*_robust.cbm
+stacking_meta_model*.pkl
 
 # Keep models and scalers for local out-of-the-box run
 !lgb_model_augmented.pkl

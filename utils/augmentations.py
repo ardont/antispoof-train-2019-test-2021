@@ -85,31 +85,109 @@ def add_noise(y, snr_db=20):
     noise = np.random.normal(0, np.sqrt(noise_power), len(y))
     return y + noise
 
+def apply_mu_law(y, mu=255):
+    """
+    Применяет сжатие и расширение u-law (mu-law) для симуляции 8-битного кодека G.711.
+    """
+    if len(y) == 0:
+        return y
+    y_abs = np.abs(y)
+    # Сжатие
+    y_compressed = np.sign(y) * np.log(1.0 + mu * y_abs) / np.log(1.0 + mu)
+    # Квантование до 8 бит (256 уровней)
+    y_quantized = np.round((y_compressed + 1.0) * 127.5) / 127.5 - 1.0
+    # Расширение
+    y_expanded = np.sign(y_quantized) * ((1.0 + mu) ** np.abs(y_quantized) - 1.0) / mu
+    return y_expanded
+
+def apply_a_law(y, A=87.6):
+    """
+    Применяет сжатие и расширение A-law для симуляции 8-битного кодека G.711.
+    """
+    if len(y) == 0:
+        return y
+    y_abs = np.abs(y)
+    cond1 = y_abs < 1.0 / A
+    cond2 = y_abs >= 1.0 / A
+    
+    # Сжатие
+    y_compressed = np.zeros_like(y)
+    y_compressed[cond1] = np.sign(y[cond1]) * (A * y_abs[cond1]) / (1.0 + np.log(A))
+    y_compressed[cond2] = np.sign(y[cond2]) * (1.0 + np.log(A * y_abs[cond2])) / (1.0 + np.log(A))
+    
+    # Квантование до 8 бит
+    y_quantized = np.round((y_compressed + 1.0) * 127.5) / 127.5 - 1.0
+    
+    # Расширение
+    y_expanded = np.zeros_like(y)
+    cond1_q = np.abs(y_quantized) < 1.0 / (1.0 + np.log(A))
+    cond2_q = np.abs(y_quantized) >= 1.0 / (1.0 + np.log(A))
+    
+    y_expanded[cond1_q] = np.sign(y_quantized[cond1_q]) * (np.abs(y_quantized[cond1_q]) * (1.0 + np.log(A))) / A
+    y_expanded[cond2_q] = np.sign(y_quantized[cond2_q]) * np.exp(np.abs(y_quantized[cond2_q]) * (1.0 + np.log(A)) - 1.0) / A
+    return y_expanded
+
+def apply_telephony_nb(y, sr=16000):
+    """
+    Симулирует узкополосный телефонный канал (Narrowband PSTN/GSM, G.711):
+    Ресемплинг до 8 кГц -> полосовая фильтрация (300-3400 Гц) -> кодек -> ресемплинг до 16 кГц.
+    """
+    if len(y) == 0:
+        return y
+    # Ресемплинг вниз до 8 кГц
+    y_8k = apply_resample_codec(y, sr, target_sr=8000)
+    
+    # Фильтрация 300 - 3400 Гц
+    y_filt = apply_bandpass_filter(y_8k, sr=8000, low_cutoff=300, high_cutoff=3400)
+    
+    # Применение кодека A-law / u-law
+    if np.random.rand() < 0.5:
+        y_codec = apply_a_law(y_filt)
+    else:
+        y_codec = apply_mu_law(y_filt)
+        
+    # Ресемплинг вверх до исходной частоты
+    y_up = apply_resample_codec(y_codec, 8000, target_sr=sr)
+    return y_up
+
+def apply_telephony_wb(y, sr=16000):
+    """
+    Симулирует широкополосный телефонный канал (Wideband VoIP, G.722 / AMR-WB):
+    Полосовой фильтр (50-7000 Гц) -> кодек A-law/u-law.
+    """
+    if len(y) == 0:
+        return y
+    y_filt = apply_bandpass_filter(y, sr=sr, low_cutoff=50, high_cutoff=7000)
+    if np.random.rand() < 0.5:
+        y_codec = apply_a_law(y_filt)
+    else:
+        y_codec = apply_mu_law(y_filt)
+    return y_codec
+
 def augment_audio(y, sr=16000):
     """
-    Randomly applies one or more of the augmentations to the input audio.
+    Применяет цепочку случайных искажений канала, реверберации и шума.
     """
     y_aug = y.copy()
     
-    # 1. Channel / Codec Simulation (60% chance)
-    if np.random.rand() < 0.6:
-        channel_type = np.random.choice(['bandpass', 'lowpass', 'resample'])
-        if channel_type == 'bandpass':
-            # GSM-like
-            y_aug = apply_bandpass_filter(y_aug, sr, low_cutoff=np.random.randint(250, 350), high_cutoff=np.random.randint(3000, 3600))
+    # 1. Симуляция канала / кодека (80% вероятность)
+    if np.random.rand() < 0.8:
+        channel_type = np.random.choice(['telephony_nb', 'telephony_wb', 'lowpass', 'resample'])
+        if channel_type == 'telephony_nb':
+            y_aug = apply_telephony_nb(y_aug, sr)
+        elif channel_type == 'telephony_wb':
+            y_aug = apply_telephony_wb(y_aug, sr)
         elif channel_type == 'lowpass':
-            # Lossy codec low-pass
             y_aug = apply_lowpass_filter(y_aug, sr, cutoff=np.random.randint(3500, 6000))
         elif channel_type == 'resample':
-            # Bitrate downsampling
             y_aug = apply_resample_codec(y_aug, sr, target_sr=np.random.choice([8000, 11025, 12000]))
             
-    # 2. Reverberation (RIR) (40% chance)
-    if np.random.rand() < 0.4:
-        y_aug = apply_reverb(y_aug, sr, rt60=np.random.uniform(0.1, 0.35), delay_ms=np.random.randint(15, 45))
+    # 2. Реверберация (RIR) (50% вероятность)
+    if np.random.rand() < 0.5:
+        y_aug = apply_reverb(y_aug, sr, rt60=np.random.uniform(0.1, 0.4), delay_ms=np.random.randint(10, 50))
         
-    # 3. Add Noise (40% chance)
-    if np.random.rand() < 0.4:
-        y_aug = add_noise(y_aug, snr_db=np.random.uniform(15, 30))
+    # 3. Аддитивный белый шум (50% вероятность)
+    if np.random.rand() < 0.5:
+        y_aug = add_noise(y_aug, snr_db=np.random.uniform(10, 30))
         
     return y_aug

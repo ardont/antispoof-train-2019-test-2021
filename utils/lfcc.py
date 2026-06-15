@@ -4,19 +4,21 @@ import librosa
 
 _filterbank_cache = {}
 
-def get_linear_filterbank(sr, n_fft, n_filters=128):
+def get_linear_filterbank(sr, n_fft, n_filters=128, fmin=0.0, fmax=None):
     """
     Creates a linear scale filterbank (cached for performance).
     """
-    key = (sr, n_fft, n_filters)
+    if fmax is None:
+        fmax = sr / 2
+    key = (sr, n_fft, n_filters, fmin, fmax)
     if key in _filterbank_cache:
         return _filterbank_cache[key]
         
     # Frequencies of the FFT bins
     freqs = np.linspace(0, sr / 2, n_fft // 2 + 1)
     
-    # Linear spacing of filter center frequencies from 0 to Nyquist (sr / 2)
-    filter_freqs = np.linspace(0, sr / 2, n_filters + 2)
+    # Linear spacing of filter center frequencies from fmin to fmax
+    filter_freqs = np.linspace(fmin, fmax, n_filters + 2)
     
     weights = np.zeros((n_filters, n_fft // 2 + 1))
     for i in range(n_filters):
@@ -41,9 +43,9 @@ def get_linear_filterbank(sr, n_fft, n_filters=128):
     _filterbank_cache[key] = weights
     return weights
 
-def extract_lfcc(y, sr=16000, n_lfcc=20, n_filters=128, n_fft=400, hop_length=160, win_length=400):
+def extract_lfcc(y, sr=16000, n_lfcc=20, n_filters=128, n_fft=400, hop_length=160, win_length=400, fmin=300, fmax=3400):
     """
-    Extracts custom Linear Frequency Cepstral Coefficients (LFCC).
+    Extracts custom Linear Frequency Cepstral Coefficients (LFCC) restricted to [fmin, fmax].
     y: 1D audio signal (numpy array)
     """
     # STFT to get the magnitude spectrogram
@@ -51,7 +53,7 @@ def extract_lfcc(y, sr=16000, n_lfcc=20, n_filters=128, n_fft=400, hop_length=16
     power_spec = stft ** 2
     
     # Build filterbank
-    fb = get_linear_filterbank(sr, n_fft, n_filters)
+    fb = get_linear_filterbank(sr, n_fft, n_filters, fmin=fmin, fmax=fmax)
     
     # Apply filterbank
     linear_spec = np.dot(fb, power_spec)

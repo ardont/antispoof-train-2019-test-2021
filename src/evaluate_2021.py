@@ -118,18 +118,19 @@ if __name__ == "__main__":
         print(f"Extracting features from 2021 eval files (total lines to process: {len(lines)})...")
         X_eval, y_eval = [], []
         
-        # Используем ThreadPoolExecutor для ускорения IO-bound чтения файлов и librosa
-        max_workers = min(16, os.cpu_count() * 2)
-        print(f"Using {max_workers} worker threads...")
+        # Используем ProcessPoolExecutor для параллельной обработки признаков на всех ядрах CPU
+        from concurrent.futures import ProcessPoolExecutor
+        max_workers = os.cpu_count()
+        print(f"Using {max_workers} worker processes for multi-processing feature extraction...")
         
-        with ThreadPoolExecutor(max_workers=max_workers) as executor:
+        with ProcessPoolExecutor(max_workers=max_workers) as executor:
             results = executor.map(process_file, lines)
             
             for idx, res in enumerate(results):
                 if res is not None:
                     X_eval.append(res[0])
                     y_eval.append(res[1])
-                if idx > 0 and idx % 2000 == 0:
+                if idx > 0 and idx % 5000 == 0:
                     print(f"Processed {idx}/{len(lines)} lines... Extracted {len(X_eval)} features.")
                     
         X_eval = np.array(X_eval)
