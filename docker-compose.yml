@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  antispoof:
+    build: .
+    container_name: asvspoof_exp
+    # Используем GPU, если они доступны
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    # Монтируем папки с данными и логи (чтобы не пересобирать образ при каждом запуске)
+    volumes:
+      - ./data:/workspace/data          # датасеты (сырые и обработанные)
+      - ./logs:/workspace/logs          # логи обучения
+      - ./checkpoints:/workspace/checkpoints  # сохранённые модели
+    # Порты
+    ports:
+      - "8501:8501"
+    # Для интерактивной отладки можно использовать:
+    # command: /bin/bash
+    stdin_open: true
+    tty: true

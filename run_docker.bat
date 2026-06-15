@@ -1,0 +1,6 @@
+@echo off
+echo Building Docker image...
+docker-compose build
+
+echo Starting dashboard...
+docker-compose up

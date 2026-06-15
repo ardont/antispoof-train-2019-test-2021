@@ -1,0 +1,60 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.venv/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-log.txt
+pip-delete-this-directory.txt
+htmlcov/
+.tox/
+.coverage
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.log
+.hypothesis/
+
+# Data and Cache files (very large)
+data/
+augmented_data_cache.pkl
+augmented_data_cache_subset.pkl
+augmented_lfcc_data_cache.pkl
+augmented_lfcc_data_cache_subset.pkl
+eval_2021_cache.pkl
+eval_lfcc_2021_cache.pkl
+eval_2021_subset_cache.pkl
+eval_lfcc_2021_subset_cache.pkl
+catboost_info/
+
+# Keep models and scalers for local out-of-the-box run
+# !lgb_model_augmented.pkl
+# !xgb_model_augmented.json
+# !cat_model_augmented.cbm
+# !lgb_model_lfcc_augmented.pkl
+# !xgb_model_lfcc_augmented.json
+# !cat_model_lfcc_augmented.cbm
+# !scaler.pkl
+# !scaler_lfcc.pkl
+
+# IDEs
+.idea/
+.vscode/
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
