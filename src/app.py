@@ -101,312 +101,719 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Стилизация под Vercel (чистый монохромный минималистичный дизайн)
-st.markdown("""
-<style>
-    @import url('https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800&family=Geist+Mono:wght@300;400;500;600;700&display=swap');
-    
-    /* Базовые стили */
-    html, body, [class*="css"], .stApp {
-        font-family: 'Geist', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-        background-color: #0b0c0e !important;
-        color: #f3f4f6 !important;
-    }
-    
-    /* Принудительная читаемость текстов в Streamlit */
-    .stMarkdown, .stMarkdown p, .stMarkdown span, .stMarkdown li, .stMarkdown div, .stMarkdown label, .stMarkdown h1, .stMarkdown h2, .stMarkdown h3, .stMarkdown h4, .stMarkdown h5 {
-        color: #f3f4f6 !important;
-    }
-    .stMarkdown h1, .stMarkdown h2, .stMarkdown h3, .stMarkdown h4, .stMarkdown h5 {
-        color: #ffffff !important;
-        font-weight: 700 !important;
-        letter-spacing: -0.03em !important;
-    }
-    
-    /* Сайдбар */
-    [data-testid="stSidebar"] {
-        background-color: #111216 !important;
-        border-right: 1px solid #22242a !important;
-    }
-    [data-testid="stSidebar"] h2, [data-testid="stSidebar"] h3, [data-testid="stSidebar"] span, [data-testid="stSidebar"] label {
-        color: #f3f4f6 !important;
-    }
-    [data-testid="stSidebar"] .stMarkdown p {
-        color: #9ca3af !important;
-    }
-    
-    /* Стилизация метрик Streamlit в сайдбаре и на главной */
-    div[data-testid="stMetric"] {
-        background-color: #16171d !important;
-        border: 1px solid #22242a !important;
-        padding: 16px !important;
-        border-radius: 6px !important;
-        margin-bottom: 12px !important;
-    }
-    div[data-testid="stMetricLabel"] > div {
-        color: #9ca3af !important;
-        font-size: 0.85em !important;
-        font-weight: 500 !important;
-    }
-    div[data-testid="stMetricValue"] > div {
-        color: #ffffff !important;
-        font-size: 1.8em !important;
-        font-weight: 700 !important;
-    }
-    
-    /* Стилизация алертов/предупреждений (например, st.sidebar.info) */
-    div[data-testid="stAlert"] {
-        background-color: #16171d !important;
-        border: 1px solid #22242a !important;
-        border-radius: 6px !important;
-    }
-    div[data-testid="stAlert"] * {
-        color: #f3f4f6 !important;
-    }
-    
-    /* Vercel Nav Bar */
-    .vercel-nav {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        border-bottom: 1px solid #22242a;
-        padding: 16px 0px;
-        margin-bottom: 24px;
-        background-color: #0b0c0e;
-    }
-    .vercel-nav-left {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        font-size: 0.9em;
-    }
-    .vercel-triangle {
-        font-size: 1.1em;
-        color: #ffffff;
-        font-weight: 800;
-    }
-    .vercel-breadcrumb-divider {
-        color: #3f4450;
-        font-weight: 300;
-    }
-    .vercel-project-owner {
-        color: #9ca3af !important;
-        font-weight: 400;
-    }
-    .vercel-project-name {
-        color: #ffffff !important;
-        font-weight: 500;
-    }
-    .vercel-badge {
-        font-size: 0.75em;
-        padding: 2px 8px;
-        border-radius: 9999px;
-        font-weight: 500;
-        border: 1px solid #22242a;
-        background-color: #111216;
-        color: #9ca3af !important;
-    }
-    .vercel-badge-prod {
-        border-color: #3b82f6;
-        color: #3b82f6 !important;
-        background-color: rgba(59, 130, 246, 0.1);
-    }
-    .vercel-badge-robust {
-        border-color: #10b981;
-        color: #10b981 !important;
-        background-color: rgba(16, 185, 129, 0.1);
-    }
-    .vercel-nav-right {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        font-size: 0.85em;
-        color: #9ca3af !important;
-    }
-    
-    /* Vercel Header Box */
-    .vercel-header {
-        padding: 0px 0px 24px 0px;
-        margin-bottom: 32px;
-        border-bottom: 1px solid #22242a;
-    }
-    .vercel-title {
-        font-size: 2.4em;
-        font-weight: 800;
-        letter-spacing: -0.05em;
-        color: #ffffff !important;
-        margin: 0;
-    }
-    .vercel-subtitle {
-        font-size: 1.05em;
-        font-weight: 300;
-        color: #9ca3af !important;
-        margin: 8px 0 0 0;
-        line-height: 1.5;
-    }
-    
-    /* Vercel-Style Карточки */
-    .vercel-card {
-        background: #16171d;
-        border: 1px solid #22242a;
-        border-radius: 6px;
-        padding: 20px;
-        margin-bottom: 20px;
-        transition: border-color 0.15s ease, background-color 0.15s ease;
-    }
-    .vercel-card:hover {
-        border-color: #2a2c35;
-        background-color: #1b1c24;
-    }
-    .vercel-title-card {
-        font-size: 1.1em;
-        font-weight: 600;
-        color: #ffffff !important;
-        letter-spacing: -0.02em;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-    }
-    
-    /* Светодиоды статуса */
-    .dot {
-        height: 8px;
-        width: 8px;
-        border-radius: 50%;
-        display: inline-block;
-        margin-right: 6px;
-    }
-    .dot-green {
-        background-color: #10b981;
-    }
-    .dot-orange {
-        background-color: #f59e0b;
-    }
-    .dot-grey {
-        background-color: #3f4450;
-    }
-    
-    .status-text {
-        font-size: 0.85em;
-        font-weight: 500;
-    }
-    .status-ready { color: #10b981 !important; }
-    .status-missing { color: #9ca3af !important; }
-    .status-building { color: #f59e0b !important; }
-    
-    .metadata-row {
-        color: #9ca3af !important;
-        font-size: 0.85em;
-        margin-top: 8px;
-        display: flex;
-        justify-content: space-between;
-        border-bottom: 1px solid #22242a;
-        padding-bottom: 6px;
-        font-family: 'Geist Mono', monospace;
-    }
-    .metadata-row b {
-        color: #ffffff !important;
-        font-weight: 400;
-    }
-    
-    /* Кнопки Vercel */
-    .stButton>button {
-        background-color: #ffffff !important;
-        color: #0b0c0e !important;
-        border-radius: 6px !important;
-        border: 1px solid #ffffff !important;
-        padding: 8px 16px !important;
-        font-weight: 500 !important;
-        font-size: 0.9em !important;
-        transition: all 0.15s ease !important;
-        width: 100%;
-        box-shadow: none !important;
-    }
-    .stButton>button:hover {
-        background-color: #0b0c0e !important;
-        color: #ffffff !important;
-        border-color: #2a2c35 !important;
-    }
-    
-    /* Терминал Vercel */
-    .terminal-box {
-        background-color: #111216;
-        border: 1px solid #22242a;
-        border-radius: 6px;
-        padding: 16px;
-        font-family: 'Geist Mono', monospace;
-        color: #f3f4f6 !important;
-        height: 350px;
-        overflow-y: auto;
-        font-size: 0.85em;
-        line-height: 1.6;
-    }
-    
-    /* Изменение дефолтных элементов Streamlit */
-    div[data-baseweb="tab-list"] {
-        border-bottom: 1px solid #22242a !important;
-        gap: 20px !important;
-    }
-    button[data-baseweb="tab"] {
-        font-size: 0.95em !important;
-        font-weight: 400 !important;
-        padding: 10px 4px !important;
-        color: #9ca3af !important;
-        background-color: transparent !important;
-        border: none !important;
-    }
-    button[aria-selected="true"] {
-        color: #ffffff !important;
-        border-bottom: 2px solid #ffffff !important;
-    }
-    
-    /* Input styling */
-    input, select, textarea, div[role="listbox"], [data-baseweb="select"] {
-        background-color: #111216 !important;
-        color: #f3f4f6 !important;
-        border: 1px solid #22242a !important;
-        border-radius: 6px !important;
-    }
-    
-    /* Дополнительно для корректной стилизации селектов Streamlit */
-    div[data-baseweb="select"] > div {
-        background-color: #111216 !important;
-        color: #f3f4f6 !important;
-    }
-    
-    /* Стилизация статических HTML-таблиц (st.table) под Vercel */
-    table {
-        width: 100% !important;
-        border-collapse: collapse !important;
-        border: 1px solid #22242a !important;
-        background-color: #16171d !important;
-        margin-bottom: 24px !important;
-        border-radius: 6px !important;
-        overflow: hidden !important;
-    }
-    th {
-        background-color: #111216 !important;
-        color: #ffffff !important;
-        font-weight: 600 !important;
-        font-size: 0.90em !important;
-        padding: 12px 16px !important;
-        border-bottom: 1px solid #22242a !important;
-        text-align: left !important;
-    }
-    td {
-        color: #e5e7eb !important;
-        font-size: 0.90em !important;
-        padding: 12px 16px !important;
-        border-bottom: 1px solid #22242a !important;
-        background-color: #16171d !important;
-        text-align: left !important;
-    }
-    tr:hover td {
-        color: #ffffff !important;
-        background-color: #1b1c24 !important;
-    }
-</style>
-""", unsafe_allow_html=True)
+# Выбор темы в сайдбаре
+theme_mode = st.sidebar.selectbox("🎨 Тема интерфейса (Theme Mode)", ["Темная (Soft Dark)", "Светлая (Soft Light)"], index=0)
+
+if theme_mode == "Темная (Soft Dark)":
+    st.markdown("""
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800&family=Geist+Mono:wght@300;400;500;600;700&display=swap');
+        
+        /* Базовые стили */
+        html, body, [class*="css"], .stApp {
+            font-family: 'Geist', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #0b0c0e !important;
+            color: #f3f4f6 !important;
+        }
+        
+        /* Принудительная читаемость текстов в Streamlit */
+        .stMarkdown, .stMarkdown p, .stMarkdown span, .stMarkdown li, .stMarkdown div, .stMarkdown h1, .stMarkdown h2, .stMarkdown h3, .stMarkdown h4, .stMarkdown h5 {
+            color: #f3f4f6 !important;
+        }
+        .stMarkdown h1, .stMarkdown h2, .stMarkdown h3, .stMarkdown h4, .stMarkdown h5 {
+            color: #ffffff !important;
+            font-weight: 700 !important;
+            letter-spacing: -0.03em !important;
+        }
+        
+        /* Системные лейблы и тексты виджетов Streamlit */
+        label, [data-testid="stWidgetLabel"] p, [data-testid="stWidgetLabel"] span, [data-testid="stWidgetLabel"], .stFileUploader label {
+            color: #f3f4f6 !important;
+            font-weight: 500 !important;
+        }
+        
+        /* Тексты для радиокнопок, чекбоксов и подписей */
+        [data-testid="stRadio"] label, [data-testid="stRadio"] p, [data-testid="stRadio"] span,
+        [data-testid="stCheckbox"] label, [data-testid="stCheckbox"] p, [data-testid="stCheckbox"] span {
+            color: #f3f4f6 !important;
+        }
+        
+        /* Сайдбар */
+        [data-testid="stSidebar"] {
+            background-color: #111216 !important;
+            border-right: 1px solid #22242a !important;
+        }
+        [data-testid="stSidebar"] h2, [data-testid="stSidebar"] h3, [data-testid="stSidebar"] span, [data-testid="stSidebar"] label, [data-testid="stSidebar"] p {
+            color: #f3f4f6 !important;
+        }
+        [data-testid="stSidebar"] .stMarkdown p {
+            color: #9ca3af !important;
+        }
+        
+        /* Стилизация метрик Streamlit */
+        div[data-testid="stMetric"] {
+            background-color: #16171d !important;
+            border: 1px solid #22242a !important;
+            padding: 16px !important;
+            border-radius: 6px !important;
+            margin-bottom: 12px !important;
+        }
+        div[data-testid="stMetricLabel"] > div {
+            color: #9ca3af !important;
+            font-size: 0.85em !important;
+            font-weight: 500 !important;
+        }
+        div[data-testid="stMetricValue"] > div {
+            color: #ffffff !important;
+            font-size: 1.8em !important;
+            font-weight: 700 !important;
+        }
+        
+        /* Стилизация алертов/предупреждений */
+        div[data-testid="stAlert"] {
+            background-color: #16171d !important;
+            border: 1px solid #22242a !important;
+            border-radius: 6px !important;
+        }
+        div[data-testid="stAlert"] * {
+            color: #f3f4f6 !important;
+        }
+        
+        /* Vercel Nav Bar */
+        .vercel-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #22242a;
+            padding: 16px 0px;
+            margin-bottom: 24px;
+            background-color: #0b0c0e;
+        }
+        .vercel-nav-left {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9em;
+        }
+        .vercel-triangle {
+            font-size: 1.1em;
+            color: #ffffff;
+            font-weight: 800;
+        }
+        .vercel-breadcrumb-divider {
+            color: #3f4450;
+            font-weight: 300;
+        }
+        .vercel-project-owner {
+            color: #9ca3af !important;
+            font-weight: 400;
+        }
+        .vercel-project-name {
+            color: #ffffff !important;
+            font-weight: 500;
+        }
+        .vercel-badge {
+            font-size: 0.75em;
+            padding: 2px 8px;
+            border-radius: 9999px;
+            font-weight: 500;
+            border: 1px solid #22242a;
+            background-color: #111216;
+            color: #9ca3af !important;
+        }
+        .vercel-badge-prod {
+            border-color: #3b82f6;
+            color: #3b82f6 !important;
+            background-color: rgba(59, 130, 246, 0.1);
+        }
+        .vercel-badge-robust {
+            border-color: #10b981;
+            color: #10b981 !important;
+            background-color: rgba(16, 185, 129, 0.1);
+        }
+        .vercel-nav-right {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.85em;
+            color: #9ca3af !important;
+        }
+        
+        /* Vercel Header Box */
+        .vercel-header {
+            padding: 0px 0px 24px 0px;
+            margin-bottom: 32px;
+            border-bottom: 1px solid #22242a;
+        }
+        .vercel-title {
+            font-size: 2.4em;
+            font-weight: 800;
+            letter-spacing: -0.05em;
+            color: #ffffff !important;
+            margin: 0;
+        }
+        .vercel-subtitle {
+            font-size: 1.05em;
+            font-weight: 300;
+            color: #9ca3af !important;
+            margin: 8px 0 0 0;
+            line-height: 1.5;
+        }
+        
+        /* Vercel-Style Карточки */
+        .vercel-card {
+            background: #16171d;
+            border: 1px solid #22242a;
+            border-radius: 6px;
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: border-color 0.15s ease, background-color 0.15s ease;
+        }
+        .vercel-card:hover {
+            border-color: #2a2c35;
+            background-color: #1b1c24;
+        }
+        .vercel-title-card {
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #ffffff !important;
+            letter-spacing: -0.02em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        /* Светодиоды статуса */
+        .dot {
+            height: 8px;
+            width: 8px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 6px;
+        }
+        .dot-green {
+            background-color: #10b981;
+        }
+        .dot-orange {
+            background-color: #f59e0b;
+        }
+        .dot-grey {
+            background-color: #3f4450;
+        }
+        
+        .status-text {
+            font-size: 0.85em;
+            font-weight: 500;
+        }
+        .status-ready { color: #10b981 !important; }
+        .status-missing { color: #9ca3af !important; }
+        .status-building { color: #f59e0b !important; }
+        
+        .metadata-row {
+            color: #9ca3af !important;
+            font-size: 0.85em;
+            margin-top: 8px;
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid #22242a;
+            padding-bottom: 6px;
+            font-family: 'Geist Mono', monospace;
+        }
+        .metadata-row b {
+            color: #ffffff !important;
+            font-weight: 400;
+        }
+        
+        /* Кнопки Vercel */
+        .stButton>button {
+            background-color: #ffffff !important;
+            color: #0b0c0e !important;
+            border-radius: 6px !important;
+            border: 1px solid #ffffff !important;
+            padding: 8px 16px !important;
+            font-weight: 500 !important;
+            font-size: 0.9em !important;
+            transition: all 0.15s ease !important;
+            width: 100%;
+            box-shadow: none !important;
+        }
+        .stButton>button:hover {
+            background-color: #0b0c0e !important;
+            color: #ffffff !important;
+            border-color: #2a2c35 !important;
+        }
+        
+        /* Терминал Vercel */
+        .terminal-box {
+            background-color: #111216;
+            border: 1px solid #22242a;
+            border-radius: 6px;
+            padding: 16px;
+            font-family: 'Geist Mono', monospace;
+            color: #f3f4f6 !important;
+            height: 350px;
+            overflow-y: auto;
+            font-size: 0.85em;
+            line-height: 1.6;
+        }
+        
+        /* Изменение дефолтных элементов Streamlit */
+        div[data-baseweb="tab-list"] {
+            border-bottom: 1px solid #22242a !important;
+            gap: 20px !important;
+        }
+        button[data-baseweb="tab"] {
+            font-size: 0.95em !important;
+            font-weight: 400 !important;
+            padding: 10px 4px !important;
+            color: #9ca3af !important;
+            background-color: transparent !important;
+            border: none !important;
+        }
+        button[aria-selected="true"] {
+            color: #ffffff !important;
+            border-bottom: 2px solid #ffffff !important;
+        }
+        
+        /* Input styling */
+        input, select, textarea, div[role="listbox"], [data-baseweb="select"] {
+            background-color: #111216 !important;
+            color: #f3f4f6 !important;
+            border: 1px solid #22242a !important;
+            border-radius: 6px !important;
+        }
+        div[data-baseweb="select"] > div {
+            background-color: #111216 !important;
+            color: #f3f4f6 !important;
+        }
+        
+        /* Стилизация статических HTML-таблиц под Vercel */
+        table {
+            width: 100% !important;
+            border-collapse: collapse !important;
+            border: 1px solid #22242a !important;
+            background-color: #16171d !important;
+            margin-bottom: 24px !important;
+            border-radius: 6px !important;
+            overflow: hidden !important;
+        }
+        th {
+            background-color: #111216 !important;
+            color: #ffffff !important;
+            font-weight: 600 !important;
+            font-size: 0.90em !important;
+            padding: 12px 16px !important;
+            border-bottom: 1px solid #22242a !important;
+            text-align: left !important;
+        }
+        td {
+            color: #e5e7eb !important;
+            font-size: 0.90em !important;
+            padding: 12px 16px !important;
+            border-bottom: 1px solid #22242a !important;
+            background-color: #16171d !important;
+            text-align: left !important;
+        }
+        tr:hover td {
+            color: #ffffff !important;
+            background-color: #1b1c24 !important;
+        }
+        
+        /* Дополнительные стили для темной темы */
+        .vercel-commit-message {
+            color: #ffffff !important;
+        }
+        .vercel-commit-hash {
+            background-color: #111216 !important;
+            border: 1px solid #22242a !important;
+            color: #f3f4f6 !important;
+            padding: 2px 6px !important;
+            border-radius: 4px !important;
+            font-family: 'Geist Mono', monospace;
+        }
+        .vercel-secondary-text {
+            color: #9ca3af !important;
+        }
+        .vercel-list {
+            color: #9ca3af !important;
+        }
+        [data-testid="stRadio"] *, [data-testid="stCheckbox"] * {
+            color: #f3f4f6 !important;
+        }
+        [data-testid="stFileUploader"] {
+            background-color: #16171d !important;
+            border: 1px solid #22242a !important;
+            border-radius: 6px !important;
+            padding: 8px !important;
+        }
+        [data-testid="stFileUploaderDropzone"] {
+            background-color: #111216 !important;
+            border: 1px dashed #22242a !important;
+            border-radius: 4px !important;
+        }
+        [data-testid="stFileUploaderDropzone"] div {
+            color: #f3f4f6 !important;
+        }
+        [data-testid="stFileUploaderDropzone"] span {
+            color: #9ca3af !important;
+        }
+    </style>
+    """, unsafe_allow_html=True)
+else:
+    st.markdown("""
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800&family=Geist+Mono:wght@300;400;500;600;700&display=swap');
+        
+        /* Базовые стили */
+        html, body, [class*="css"], .stApp {
+            font-family: 'Geist', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #fafafa !important;
+            color: #18181b !important;
+        }
+        
+        /* Принудительная читаемость текстов в Streamlit */
+        .stMarkdown, .stMarkdown p, .stMarkdown span, .stMarkdown li, .stMarkdown div, .stMarkdown h1, .stMarkdown h2, .stMarkdown h3, .stMarkdown h4, .stMarkdown h5 {
+            color: #18181b !important;
+        }
+        .stMarkdown h1, .stMarkdown h2, .stMarkdown h3, .stMarkdown h4, .stMarkdown h5 {
+            color: #000000 !important;
+            font-weight: 700 !important;
+            letter-spacing: -0.03em !important;
+        }
+        
+        /* Системные лейблы и тексты виджетов Streamlit */
+        label, [data-testid="stWidgetLabel"] p, [data-testid="stWidgetLabel"] span, [data-testid="stWidgetLabel"], .stFileUploader label {
+            color: #18181b !important;
+            font-weight: 500 !important;
+        }
+        
+        /* Тексты для радиокнопок, чекбоксов и подписей */
+        [data-testid="stRadio"] label, [data-testid="stRadio"] p, [data-testid="stRadio"] span,
+        [data-testid="stCheckbox"] label, [data-testid="stCheckbox"] p, [data-testid="stCheckbox"] span {
+            color: #18181b !important;
+        }
+        
+        /* Сайдбар */
+        [data-testid="stSidebar"] {
+            background-color: #f4f4f5 !important;
+            border-right: 1px solid #e4e4e7 !important;
+        }
+        [data-testid="stSidebar"] h2, [data-testid="stSidebar"] h3, [data-testid="stSidebar"] span, [data-testid="stSidebar"] label, [data-testid="stSidebar"] p {
+            color: #18181b !important;
+        }
+        [data-testid="stSidebar"] .stMarkdown p {
+            color: #52525b !important;
+        }
+        
+        /* Стилизация метрик Streamlit */
+        div[data-testid="stMetric"] {
+            background-color: #ffffff !important;
+            border: 1px solid #e4e4e7 !important;
+            padding: 16px !important;
+            border-radius: 6px !important;
+            margin-bottom: 12px !important;
+        }
+        div[data-testid="stMetricLabel"] > div {
+            color: #52525b !important;
+            font-size: 0.85em !important;
+            font-weight: 500 !important;
+        }
+        div[data-testid="stMetricValue"] > div {
+            color: #000000 !important;
+            font-size: 1.8em !important;
+            font-weight: 700 !important;
+        }
+        
+        /* Стилизация алертов/предупреждений */
+        div[data-testid="stAlert"] {
+            background-color: #ffffff !important;
+            border: 1px solid #e4e4e7 !important;
+            border-radius: 6px !important;
+        }
+        div[data-testid="stAlert"] * {
+            color: #18181b !important;
+        }
+        
+        /* Vercel Nav Bar */
+        .vercel-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #e4e4e7;
+            padding: 16px 0px;
+            margin-bottom: 24px;
+            background-color: #fafafa;
+        }
+        .vercel-nav-left {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9em;
+        }
+        .vercel-triangle {
+            font-size: 1.1em;
+            color: #000000;
+            font-weight: 800;
+        }
+        .vercel-breadcrumb-divider {
+            color: #a1a1aa;
+            font-weight: 300;
+        }
+        .vercel-project-owner {
+            color: #52525b !important;
+            font-weight: 400;
+        }
+        .vercel-project-name {
+            color: #000000 !important;
+            font-weight: 500;
+        }
+        .vercel-badge {
+            font-size: 0.75em;
+            padding: 2px 8px;
+            border-radius: 9999px;
+            font-weight: 500;
+            border: 1px solid #e4e4e7;
+            background-color: #f4f4f5;
+            color: #52525b !important;
+        }
+        .vercel-badge-prod {
+            border-color: #3b82f6;
+            color: #3b82f6 !important;
+            background-color: rgba(59, 130, 246, 0.05);
+        }
+        .vercel-badge-robust {
+            border-color: #10b981;
+            color: #10b981 !important;
+            background-color: rgba(16, 185, 129, 0.05);
+        }
+        .vercel-nav-right {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.85em;
+            color: #52525b !important;
+        }
+        
+        /* Vercel Header Box */
+        .vercel-header {
+            padding: 0px 0px 24px 0px;
+            margin-bottom: 32px;
+            border-bottom: 1px solid #e4e4e7;
+        }
+        .vercel-title {
+            font-size: 2.4em;
+            font-weight: 800;
+            letter-spacing: -0.05em;
+            color: #000000 !important;
+            margin: 0;
+        }
+        .vercel-subtitle {
+            font-size: 1.05em;
+            font-weight: 300;
+            color: #52525b !important;
+            margin: 8px 0 0 0;
+            line-height: 1.5;
+        }
+        
+        /* Vercel-Style Карточки */
+        .vercel-card {
+            background: #ffffff;
+            border: 1px solid #e4e4e7;
+            border-radius: 6px;
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: border-color 0.15s ease, background-color 0.15s ease;
+        }
+        .vercel-card:hover {
+            border-color: #a1a1aa;
+            background-color: #f4f4f5;
+        }
+        .vercel-title-card {
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #000000 !important;
+            letter-spacing: -0.02em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        /* Светодиоды статуса */
+        .dot {
+            height: 8px;
+            width: 8px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 6px;
+        }
+        .dot-green {
+            background-color: #10b981;
+        }
+        .dot-orange {
+            background-color: #f59e0b;
+        }
+        .dot-grey {
+            background-color: #a1a1aa;
+        }
+        
+        .status-text {
+            font-size: 0.85em;
+            font-weight: 500;
+        }
+        .status-ready { color: #10b981 !important; }
+        .status-missing { color: #52525b !important; }
+        .status-building { color: #f59e0b !important; }
+        
+        .metadata-row {
+            color: #52525b !important;
+            font-size: 0.85em;
+            margin-top: 8px;
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid #e4e4e7;
+            padding-bottom: 6px;
+            font-family: 'Geist Mono', monospace;
+        }
+        .metadata-row b {
+            color: #000000 !important;
+            font-weight: 400;
+        }
+        
+        /* Кнопки Vercel */
+        .stButton>button {
+            background-color: #18181b !important;
+            color: #ffffff !important;
+            border-radius: 6px !important;
+            border: 1px solid #18181b !important;
+            padding: 8px 16px !important;
+            font-weight: 500 !important;
+            font-size: 0.9em !important;
+            transition: all 0.15s ease !important;
+            width: 100%;
+            box-shadow: none !important;
+        }
+        .stButton>button:hover {
+            background-color: #ffffff !important;
+            color: #18181b !important;
+            border-color: #a1a1aa !important;
+        }
+        
+        /* Терминал Vercel - терминал оставляем темным для профессионального вида */
+        .terminal-box {
+            background-color: #18181b;
+            border: 1px solid #18181b;
+            border-radius: 6px;
+            padding: 16px;
+            font-family: 'Geist Mono', monospace;
+            color: #f3f4f6 !important;
+            height: 350px;
+            overflow-y: auto;
+            font-size: 0.85em;
+            line-height: 1.6;
+        }
+        
+        /* Изменение дефолтных элементов Streamlit */
+        div[data-baseweb="tab-list"] {
+            border-bottom: 1px solid #e4e4e7 !important;
+            gap: 20px !important;
+        }
+        button[data-baseweb="tab"] {
+            font-size: 0.95em !important;
+            font-weight: 400 !important;
+            padding: 10px 4px !important;
+            color: #52525b !important;
+            background-color: transparent !important;
+            border: none !important;
+        }
+        button[aria-selected="true"] {
+            color: #000000 !important;
+            border-bottom: 2px solid #000000 !important;
+        }
+        
+        /* Input styling */
+        input, select, textarea, div[role="listbox"], [data-baseweb="select"] {
+            background-color: #ffffff !important;
+            color: #18181b !important;
+            border: 1px solid #d4d4d8 !important;
+            border-radius: 6px !important;
+        }
+        div[data-baseweb="select"] > div {
+            background-color: #ffffff !important;
+            color: #18181b !important;
+        }
+        
+        /* Стилизация статических HTML-таблиц под Vercel */
+        table {
+            width: 100% !important;
+            border-collapse: collapse !important;
+            border: 1px solid #e4e4e7 !important;
+            background-color: #ffffff !important;
+            margin-bottom: 24px !important;
+            border-radius: 6px !important;
+            overflow: hidden !important;
+        }
+        th {
+            background-color: #f4f4f5 !important;
+            color: #000000 !important;
+            font-weight: 600 !important;
+            font-size: 0.90em !important;
+            padding: 12px 16px !important;
+            border-bottom: 1px solid #e4e4e7 !important;
+            text-align: left !important;
+        }
+        td {
+            color: #27272a !important;
+            font-size: 0.90em !important;
+            padding: 12px 16px !important;
+            border-bottom: 1px solid #e4e4e7 !important;
+            background-color: #ffffff !important;
+            text-align: left !important;
+        }
+        tr:hover td {
+            color: #000000 !important;
+            background-color: #f4f4f5 !important;
+        }
+        
+        /* Дополнительные стили для светлой темы */
+        .vercel-commit-message {
+            color: #000000 !important;
+        }
+        .vercel-commit-hash {
+            background-color: #f4f4f5 !important;
+            border: 1px solid #e4e4e7 !important;
+            color: #18181b !important;
+            padding: 2px 6px !important;
+            border-radius: 4px !important;
+            font-family: 'Geist Mono', monospace;
+        }
+        .vercel-secondary-text {
+            color: #52525b !important;
+        }
+        .vercel-list {
+            color: #52525b !important;
+        }
+        [data-testid="stRadio"] *, [data-testid="stCheckbox"] * {
+            color: #18181b !important;
+        }
+        [data-testid="stFileUploader"] {
+            background-color: #ffffff !important;
+            border: 1px solid #e4e4e7 !important;
+            border-radius: 6px !important;
+            padding: 8px !important;
+        }
+        [data-testid="stFileUploaderDropzone"] {
+            background-color: #fafafa !important;
+            border: 1px dashed #d4d4d8 !important;
+            border-radius: 4px !important;
+        }
+        [data-testid="stFileUploaderDropzone"] div {
+            color: #18181b !important;
+        }
+        [data-testid="stFileUploaderDropzone"] span {
+            color: #52525b !important;
+        }
+    </style>
+    """, unsafe_allow_html=True)
 
 # Верхняя панель навигации Vercel
 st.markdown("""
@@ -483,40 +890,52 @@ with tab1:
     
     col_chart, col_desc = st.columns([3, 2])
     with col_chart:
+        is_dark = (theme_mode == "Темная (Soft Dark)")
+        fig_bg = '#16171d' if is_dark else '#ffffff'
+        axis_color = '#9ca3af' if is_dark else '#52525b'
+        border_color = '#22242a' if is_dark else '#e4e4e7'
+        legend_bg = '#111216' if is_dark else '#f4f4f5'
+        legend_text = 'white' if is_dark else 'black'
+        bar_text_color = '#f3f4f6' if is_dark else '#18181b'
+        
+        if is_dark:
+            colors = ['#22242a', '#22242a', '#3f4450', '#5c6370', '#8a8f98', '#10b981', '#3b82f6']
+        else:
+            colors = ['#e4e4e7', '#e4e4e7', '#a1a1aa', '#71717a', '#52525b', '#10b981', '#0070f3']
+            
         fig, ax = plt.subplots(figsize=(10, 5.5))
-        # Фирменные цвета под мягкую тему
-        colors = ['#22242a', '#22242a', '#3f4450', '#5c6370', '#8a8f98', '#10b981', '#3b82f6']
         bars = ax.barh(df_exp["Эксперимент"], df_exp["EER 2021 Eval (%)"], color=colors, height=0.55)
-        ax.set_xlabel("Equal Error Rate (EER, %)", color='#9ca3af', fontsize=10)
+        ax.set_xlabel("Equal Error Rate (EER, %)", color=axis_color, fontsize=10)
         ax.axvline(5.0, color="#ef4444", linestyle="--", linewidth=1.2, label="Целевой EER (5.0%)")
-        ax.legend(facecolor='#111216', edgecolor='#22242a', labelcolor='white')
+        ax.legend(facecolor=legend_bg, edgecolor=border_color, labelcolor=legend_text)
         
         for bar in bars:
             width = bar.get_width()
             ax.text(width + 0.4, bar.get_y() + bar.get_height()/2, f'{width:.2f}%', 
-                    va='center', ha='left', color='#f3f4f6', fontweight='bold', fontsize=9)
+                    va='center', ha='left', color=bar_text_color, fontweight='bold', fontsize=9)
                     
-        fig.patch.set_facecolor('#16171d')
-        ax.set_facecolor('#16171d')
-        ax.spines['bottom'].set_color('#22242a')
+        fig.patch.set_facecolor(fig_bg)
+        ax.set_facecolor(fig_bg)
+        ax.spines['bottom'].set_color(border_color)
         ax.spines['top'].set_color('none')
         ax.spines['right'].set_color('none')
-        ax.spines['left'].set_color('#22242a')
-        ax.tick_params(colors='#9ca3af', labelsize=9)
-        ax.xaxis.label.set_color('#9ca3af')
-        ax.title.set_color('#ffffff')
+        ax.spines['left'].set_color(border_color)
+        ax.tick_params(colors=axis_color, labelsize=9)
+        ax.xaxis.label.set_color(axis_color)
+        ax.title.set_color(bar_text_color)
         st.pyplot(fig)
         
     with col_desc:
         st.markdown(f"""
-        <div style="background-color: #16171d; border: 1px solid #22242a; padding: 20px; border-radius: 6px;">
-            <h4 style="margin-top:0; color:#ffffff; font-size:1.15em; letter-spacing:-0.02em;">🔑 Ключевые выводы доменной адаптации:</h4>
-            <ul style="padding-left: 18px; color: #9ca3af; font-size: 0.92em; line-height: 1.6; margin-bottom: 0;">
+        <div class="vercel-card" style="padding: 20px;">
+            <h4 class="vercel-title-card" style="margin-top:0; font-size:1.15em; letter-spacing:-0.02em;">🔑 Ключевые выводы доменной адаптации:</h4>
+            <ul class="vercel-list" style="padding-left: 18px; font-size: 0.92em; line-height: 1.6; margin-bottom: 0;">
                 <li style="margin-bottom: 8px;"><b>Доменный сдвиг:</b> Чистые модели переобучаются на высокие частоты (>3400 Гц). В реальных звонках 2021 года этих частот нет, из-за чего EER достигал 21%.</li>
                 <li style="margin-bottom: 8px;"><b>CMS Нормализация:</b> Вычитание среднего кепстрального спектра нейтрализует аддитивные искажения АЧХ каналов связи, снижая ошибку до 14.97%.</li>
                 <li style="margin-bottom: 8px;"><b>Частотный срез (300-3400 Гц):</b> Ограничение частот заставляет бустинги искать паттерны там, где звук проходит сквозь кодеки телефонии.</li>
                 <li style="margin-bottom: 8px;"><b>Телефония-аугментация + Optuna:</b> Подбор гиперпараметров снизил ошибку EER с 11.52% до <b>8.64%</b> на взвешенном ансамбле.</li>
             </ul>
+        </div>
         """, unsafe_allow_html=True)
 
 # -----------------------------------------------------------------------------
@@ -697,14 +1116,18 @@ with tab2:
                         y = librosa.resample(y, orig_sr=sr, target_sr=16000)
                         sr = 16000
                     
+                    is_dark = (theme_mode == "Темная (Soft Dark)")
+                    wave_bg = '#0b0c0e' if is_dark else '#fafafa'
+                    wave_color = '#ffffff' if is_dark else '#18181b'
+                    
                     # Отрисовка Waveform в стиле Vercel (минималистичный монохром)
                     st.markdown("#### 🌊 Waveform (Форма звуковой волны)")
                     fig, ax = plt.subplots(figsize=(10, 2.2))
                     time_axis = np.linspace(0, len(y) / sr, num=len(y))
-                    ax.plot(time_axis, y, color='#ffffff', alpha=0.9, linewidth=1)
-                    ax.fill_between(time_axis, y, color='#ffffff', alpha=0.1)
-                    ax.set_facecolor('#0b0c0e')
-                    fig.patch.set_facecolor('#0b0c0e')
+                    ax.plot(time_axis, y, color=wave_color, alpha=0.9, linewidth=1)
+                    ax.fill_between(time_axis, y, color=wave_color, alpha=0.1)
+                    ax.set_facecolor(wave_bg)
+                    fig.patch.set_facecolor(wave_bg)
                     ax.axis('off')
                     st.pyplot(fig)
                     
@@ -749,22 +1172,27 @@ with tab2:
                         verdict_class = "🚨 ВЕРДИКТ: ПОДДЕЛКА (SPOOF)" if is_spoof else "✅ ВЕРДИКТ: ОРИГИНАЛ (BONA FIDE)"
                         verdict_color = "#ef4444" if is_spoof else "#10b981"
                         
+                        is_dark = (theme_mode == "Темная (Soft Dark)")
+                        slider_bg = '#22242a' if is_dark else '#e4e4e7'
+                        slider_handle = '#ffffff' if is_dark else '#000000'
+                        secondary_text_color = '#888888' if is_dark else '#6b7280'
+                        
                         st.markdown(f"""
                         <div class="vercel-card" style="padding: 25px; text-align: center;">
                             <h3 style="color: {verdict_color}; margin-top: 0; font-size: 1.4em; font-weight:800;">{verdict_class}</h3>
-                            <p style="color: #888888; font-size: 0.95em; margin-bottom: 0;">Ансамбль взвесил оценки всех активных моделей бустинга.</p>
+                            <p style="color: {secondary_text_color}; font-size: 0.95em; margin-bottom: 0;">Ансамбль взвесил оценки всех активных моделей бустинга.</p>
                         </div>
                         """, unsafe_allow_html=True)
                         
                         # Градиентный спидометр / индикатор в стиле Vercel (плоский серый бэкграунд слайдера)
                         st.markdown(f"""
                         <div style="margin-top: 25px; margin-bottom: 15px;">
-                            <div style="display: flex; justify-content: space-between; font-weight: 500; font-size: 0.85em; margin-bottom: 6px; color: #888888;">
+                            <div style="display: flex; justify-content: space-between; font-weight: 500; font-size: 0.85em; margin-bottom: 6px; color: {secondary_text_color};">
                                 <span>Human (0.0)</span>
                                 <span>Deepfake (1.0)</span>
                             </div>
-                            <div style="height: 6px; width: 100%; background: #1f1f1f; border-radius: 3px; position: relative;">
-                                <div style="position: absolute; left: calc({ensemble_score * 100}% - 4px); top: -3px; height: 12px; width: 8px; background: #ffffff; border-radius: 2px; transition: left 0.3s ease;"></div>
+                            <div style="height: 6px; width: 100%; background: {slider_bg}; border-radius: 3px; position: relative;">
+                                <div style="position: absolute; left: calc({ensemble_score * 100}% - 4px); top: -3px; height: 12px; width: 8px; background: {slider_handle}; border-radius: 2px; transition: left 0.3s ease;"></div>
                             </div>
                             <div style="text-align: center; margin-top: 12px; font-weight: 700; font-size: 1.1em; color: {verdict_color}">
                                 Вероятность спуфинга: {ensemble_score*100:.2f}%
@@ -773,13 +1201,18 @@ with tab2:
                         """, unsafe_allow_html=True)
                         
                     with col_chart:
-                        st.markdown("<p style='font-weight:600; font-size:0.95em; color:#ffffff; margin-bottom:12px;'>Детализация вероятностей по моделям (ближе к 1.0 = синтез):</p>", unsafe_allow_html=True)
+                        fig_bg = '#16171d' if is_dark else '#ffffff'
+                        axis_color = '#9ca3af' if is_dark else '#52525b'
+                        border_color = '#22242a' if is_dark else '#e4e4e7'
+                        text_color = '#ffffff' if is_dark else '#18181b'
+                        
+                        st.markdown(f"<p style='font-weight:600; font-size:0.95em; color:{text_color}; margin-bottom:12px;'>Детализация вероятностей по моделям (ближе к 1.0 = синтез):</p>", unsafe_allow_html=True)
                         df_scores = pd.DataFrame({
                             "Модель": list(predictions.keys()),
                             "Оценка": list(predictions.values())
                         })
                         
-                        # Отрисовка красивых баров через matplotlib в темном стиле
+                        # Отрисовка красивых баров через matplotlib в динамическом стиле
                         fig, ax = plt.subplots(figsize=(8, 4))
                         bar_colors = ['#ef4444' if v > 0.5 else '#10b981' for v in df_scores["Оценка"]]
                         y_pos = np.arange(len(df_scores))
@@ -791,15 +1224,15 @@ with tab2:
                         for bar in bars:
                             width = bar.get_width()
                             ax.text(width + 0.02, bar.get_y() + bar.get_height()/2, f'{width:.3f}', 
-                                    va='center', ha='left', color='#ffffff', fontweight='500', fontsize=8)
+                                    va='center', ha='left', color=text_color, fontweight='500', fontsize=8)
                                     
-                        fig.patch.set_facecolor('#16171d')
-                        ax.set_facecolor('#16171d')
-                        ax.spines['bottom'].set_color('#22242a')
+                        fig.patch.set_facecolor(fig_bg)
+                        ax.set_facecolor(fig_bg)
+                        ax.spines['bottom'].set_color(border_color)
                         ax.spines['top'].set_color('none')
                         ax.spines['right'].set_color('none')
-                        ax.spines['left'].set_color('#22242a')
-                        ax.tick_params(colors='#9ca3af', labelsize=8)
+                        ax.spines['left'].set_color(border_color)
+                        ax.tick_params(colors=axis_color, labelsize=8)
                         st.pyplot(fig)
                         
                 except Exception as e:
@@ -877,9 +1310,9 @@ with tab3:
             <div class="vercel-card" style="margin-bottom: 12px; padding: 16px;">
                 <div style="display: flex; justify-content: space-between; align-items: center;">
                     <div>
-                        <div style="font-weight: 600; color: #ffffff;">{commit['message']}</div>
-                        <div style="font-size: 0.85em; color: #888888; margin-top: 4px; font-family: 'Geist Mono', monospace;">
-                            <code style="background-color: #111; padding: 2px 6px; border-radius: 4px; border: 1px solid #222; color: #fff;">{commit['hash']}</code>
+                        <div class="vercel-commit-message" style="font-weight: 600;">{commit['message']}</div>
+                        <div class="vercel-secondary-text" style="font-size: 0.85em; margin-top: 4px; font-family: 'Geist Mono', monospace;">
+                            <code class="vercel-commit-hash">{commit['hash']}</code>
                             &nbsp;•&nbsp; {commit['author']} &nbsp;•&nbsp; {commit['date']}
                         </div>
                     </div>
