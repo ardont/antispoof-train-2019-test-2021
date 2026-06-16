@@ -66,6 +66,7 @@ def objective_xgb(trial, X_train, y_train, X_dev, y_dev):
         'random_state': 42,
         'eval_metric': 'logloss',
         'use_label_encoder': False,
+        'early_stopping_rounds': 30,
         'n_jobs': -1
     }
     
@@ -73,7 +74,6 @@ def objective_xgb(trial, X_train, y_train, X_dev, y_dev):
     model.fit(
         X_train, y_train,
         eval_set=[(X_dev, y_dev)],
-        early_stopping_rounds=30,
         verbose=False
     )
     
@@ -175,12 +175,12 @@ if __name__ == "__main__":
     best_params_xgb['random_state'] = 42
     best_params_xgb['eval_metric'] = 'logloss'
     best_params_xgb['use_label_encoder'] = False
+    best_params_xgb['early_stopping_rounds'] = 50
     
     final_xgb = xgb.XGBClassifier(**best_params_xgb)
     final_xgb.fit(
         X_train_scaled, y_train,
         eval_set=[(X_dev_scaled, y_dev)],
-        early_stopping_rounds=50,
         verbose=False
     )
     

@@ -3,26 +3,26 @@
 ====================================================
 
 --- Individual Robust Models EER ---
-LGBM_MFCC: 11.39%
-XGB_MFCC: 11.13%
+LGBM_MFCC: 11.26%
+XGB_MFCC: 10.47%
 CAT_MFCC: 10.47%
 MLP_MFCC: 11.13%
 LGBM_LFCC: 13.09%
 XGB_LFCC: 13.48%
 CAT_LFCC: 14.01%
 MLP_LFCC: 11.52%
-LGBM_COMB: 10.47%
-XGB_COMB: 10.60%
+LGBM_COMB: 11.26%
+XGB_COMB: 10.73%
 CAT_COMB: 10.99%
 MLP_COMB: 10.34%
 
 --- Ensembles EER ---
-Ensemble (Robust MFCC only): 10.73%
+Ensemble (Robust MFCC only): 10.47%
 Ensemble (Robust LFCC only): 13.22%
-Ensemble (Robust Combined only): 10.60%
-Ensemble (LGBM MFCC + LGBM LFCC): 11.13%
-Ensemble (All 9 Robust Models): 9.16%
+Ensemble (Robust Combined only): 10.99%
+Ensemble (LGBM MFCC + LGBM LFCC): 10.99%
+Ensemble (All 9 Robust Models): 9.03%
 
-Best Ensemble Weight (MFCC, LFCC, Combined): 0.35, 0.19, 0.45
-Best Optimized Ensemble EER: 8.51%
-Stacking Meta-Classifier EER: 9.16%
+Best Ensemble Weight (MFCC, LFCC, Combined): 0.50, 0.00, 0.50
+Best Optimized Ensemble EER: 8.64%
+Stacking Meta-Classifier EER: 9.03%
