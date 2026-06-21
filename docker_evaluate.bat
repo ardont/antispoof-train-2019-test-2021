@@ -22,7 +22,7 @@ if %errorlevel% neq 0 (
 
 :: Unpack data inside Docker
 echo [2/3] Preparing and checking evaluation data in Docker...
-docker run --rm -v "%cd%:/workspace" asvspoof_exp python scripts/prepare_data.py --eval
+docker run --rm --gpus all -v "%cd%:/workspace" asvspoof_exp python scripts/prepare_data.py --eval
 if %errorlevel% neq 0 (
     echo [ERROR] Evaluation data preparation failed inside Docker!
     exit /b 1
@@ -30,7 +30,7 @@ if %errorlevel% neq 0 (
 
 :: Run evaluation inside Docker
 echo [3/3] Running robust ensemble evaluation inside container...
-docker run --rm -v "%cd%:/workspace" asvspoof_exp python src/evaluate_robust_ensemble_final.py %*
+docker run --rm --gpus all -v "%cd%:/workspace" asvspoof_exp python src/evaluate_robust_ensemble_final.py %*
 
 echo.
 echo ========================================================

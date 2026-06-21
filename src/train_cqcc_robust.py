@@ -27,6 +27,16 @@ os.environ["OMP_NUM_THREADS"] = "1"
 os.environ["MKL_NUM_THREADS"] = "1"
 os.environ["OPENBLAS_NUM_THREADS"] = "1"
 
+def check_gpu():
+    try:
+        import torch
+        if torch.cuda.is_available():
+            print("[INFO] NVIDIA GPU detected via PyTorch. Enabling GPU training.")
+            return True
+    except ImportError:
+        pass
+    return False
+
 # -----------------------------------------------------------------------------
 # Paths
 # -----------------------------------------------------------------------------
@@ -160,6 +170,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
     
     run_subset = args.subset
+    use_gpu = check_gpu()
     
     if run_subset:
         cache_file = "robust_cqcc_cache_subset.pkl"
@@ -215,11 +226,21 @@ if __name__ == "__main__":
         
     # Train XGBoost
     print("\nTraining XGBoost on robust CQCC...")
-    xgb_model = xgb.XGBClassifier(
-        n_estimators=300, learning_rate=0.05, max_depth=6,
-        subsample=0.8, colsample_bytree=0.8, random_state=42,
-        eval_metric='logloss', early_stopping_rounds=50, use_label_encoder=False
-    )
+    xgb_params = {
+        'n_estimators': 300,
+        'learning_rate': 0.05,
+        'max_depth': 6,
+        'subsample': 0.8,
+        'colsample_bytree': 0.8,
+        'random_state': 42,
+        'eval_metric': 'logloss',
+        'early_stopping_rounds': 50,
+        'use_label_encoder': False
+    }
+    if use_gpu:
+        xgb_params['device'] = 'cuda'
+        xgb_params['tree_method'] = 'hist'
+    xgb_model = xgb.XGBClassifier(**xgb_params)
     xgb_model.fit(X_train_scaled, y_train, eval_set=[(X_dev_scaled, y_dev)], verbose=False)
     preds = xgb_model.predict_proba(X_dev_scaled)[:, 1]
     eer, _ = compute_eer(preds, y_dev)
@@ -228,10 +249,21 @@ if __name__ == "__main__":
     
     # Train CatBoost
     print("\nTraining CatBoost on robust CQCC...")
-    cat_model = CatBoostClassifier(
-        iterations=1000, learning_rate=0.05, depth=6, loss_function='Logloss',
-        eval_metric='AUC', early_stopping_rounds=50, random_seed=42, verbose=False, thread_count=-1
-    )
+    cat_params = {
+        'iterations': 1000,
+        'learning_rate': 0.05,
+        'depth': 6,
+        'loss_function': 'Logloss',
+        'eval_metric': 'AUC',
+        'early_stopping_rounds': 50,
+        'random_seed': 42,
+        'verbose': False
+    }
+    if use_gpu:
+        cat_params['task_type'] = 'GPU'
+    else:
+        cat_params['thread_count'] = -1
+    cat_model = CatBoostClassifier(**cat_params)
     cat_model.fit(X_train_scaled, y_train, eval_set=[(X_dev_scaled, y_dev)], verbose=False)
     preds = cat_model.predict_proba(X_dev_scaled)[:, 1]
     eer, _ = compute_eer(preds, y_dev)

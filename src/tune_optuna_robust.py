@@ -19,6 +19,18 @@ import xgboost as xgb
 import lightgbm as lgb
 from catboost import CatBoostClassifier
 
+use_gpu = False
+
+def check_gpu():
+    try:
+        import torch
+        if torch.cuda.is_available():
+            print("[INFO] NVIDIA GPU detected via PyTorch. Enabling GPU training.")
+            return True
+    except ImportError:
+        pass
+    return False
+
 # Проверяем и устанавливаем optuna при необходимости
 try:
     import optuna
@@ -67,9 +79,11 @@ def objective_xgb(trial, X_train, y_train, X_dev, y_dev):
         'eval_metric': 'logloss',
         'use_label_encoder': False,
         'early_stopping_rounds': 30,
-        'n_jobs': -1
     }
-    
+    if use_gpu:
+        params['device'] = 'cuda'
+        params['tree_method'] = 'hist'
+        
     model = xgb.XGBClassifier(**params)
     model.fit(
         X_train, y_train,
@@ -89,6 +103,8 @@ if __name__ == "__main__":
     args = parser.parse_args()
     
     feature_type = args.feature.lower()
+    global use_gpu
+    use_gpu = check_gpu()
     
     cache_file = f"robust_{feature_type}_cache.pkl"
     if not os.path.exists(cache_file):
@@ -177,6 +193,9 @@ if __name__ == "__main__":
     best_params_xgb['eval_metric'] = 'logloss'
     best_params_xgb['use_label_encoder'] = False
     best_params_xgb['early_stopping_rounds'] = 50
+    if use_gpu:
+        best_params_xgb['device'] = 'cuda'
+        best_params_xgb['tree_method'] = 'hist'
     
     final_xgb = xgb.XGBClassifier(**best_params_xgb)
     final_xgb.fit(
