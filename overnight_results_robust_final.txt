@@ -1,0 +1,32 @@
+====================================================
+     FINAL 12-MODEL ROBUST EVALUATION ON 2021 EVAL   
+====================================================
+
+--- Individual Model EERs ---
+  LGBM_MFCC: 15.75%
+  XGB_MFCC: 15.72%
+  CAT_MFCC: 15.79%
+  MLP_MFCC: 16.47%
+  LGBM_LFCC: 17.26%
+  XGB_LFCC: 17.32%
+  CAT_LFCC: 17.33%
+  MLP_LFCC: 19.04%
+  LGBM_CQCC: 16.72%
+  XGB_CQCC: 16.38%
+  CAT_CQCC: 17.53%
+  MLP_CQCC: 17.21%
+  LGBM_COMB: 14.51%
+  XGB_COMB: 14.69%
+  CAT_COMB: 15.36%
+  MLP_COMB: 14.59%
+
+--- Group Ensembles EER ---
+  Ensemble (MFCC only): 15.39%
+  Ensemble (LFCC only): 16.83%
+  Ensemble (CQCC only): 16.41%
+  Ensemble (COMB only): 14.29%
+
+--- Weight Optimization ---
+  Best Weights (MFCC, LFCC, CQCC, COMB): 0.30, 0.00, 0.14, 0.56
+  Best Weighted Ensemble EER: 13.86%
+  Calibrated Stacking EER: 14.19%

@@ -83,8 +83,9 @@ def objective_xgb(trial, X_train, y_train, X_dev, y_dev):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Optimize Robust Models using Optuna")
-    parser.add_argument("--feature", type=str, default="combined", choices=["mfcc", "lfcc", "combined"])
+    parser.add_argument("--feature", type=str, default="combined", choices=["mfcc", "lfcc", "cqcc", "combined"])
     parser.add_argument("--trials", type=int, default=30, help="Number of Optuna trials")
+    parser.add_argument("--subsample-size", type=int, default=15000, help="Number of training samples for tuning")
     args = parser.parse_args()
     
     feature_type = args.feature.lower()
@@ -112,11 +113,11 @@ if __name__ == "__main__":
         X_train_scaled = scaler.fit_transform(X_train)
         X_dev_scaled = scaler.transform(X_dev)
         
-    # Уменьшаем выборку для ускорения тюнинга (берем 15000 случайных сэмплов для обучения)
-    if X_train_scaled.shape[0] > 15000:
-        print("Subsampling training set to 15,000 files for faster optimization...")
+    # Уменьшаем выборку для ускорения тюнинга (берем args.subsample_size случайных сэмплов для обучения)
+    if X_train_scaled.shape[0] > args.subsample_size:
+        print(f"Subsampling training set to {args.subsample_size} files for faster optimization...")
         np.random.seed(42)
-        indices = np.random.choice(X_train_scaled.shape[0], 15000, replace=False)
+        indices = np.random.choice(X_train_scaled.shape[0], args.subsample_size, replace=False)
         X_train_sub = X_train_scaled[indices]
         y_train_sub = y_train[indices]
     else:

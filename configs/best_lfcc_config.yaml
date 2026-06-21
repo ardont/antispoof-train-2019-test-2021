@@ -1,0 +1,9 @@
+# Best LFCC parameters found via Grid Search
+n_lfcc: 25
+n_filters: 40
+win_length: 480
+hop_length: 160
+use_double_deltas: true
+fmin: 300
+fmax: 3400
+joint_eer_subset: 0.147655

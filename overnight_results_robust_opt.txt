@@ -1,0 +1,23 @@
+====================================================
+  FINAL ROBUST EVALUATION SUMMARY (OPTIMIZED LFCC)  
+====================================================
+
+LFCC parameters: n_lfcc=25, n_filters=40, win_length=480, use_double_deltas=True
+
+--- Individual Model EERs ---
+  LGBM_MFCC: 15.66%
+  XGB_MFCC: 15.87%
+  CAT_MFCC: 15.79%
+  LGBM_LFCC: 17.29%
+  XGB_LFCC: 17.33%
+  CAT_LFCC: 17.33%
+  LGBM_COMB: 15.72%
+  XGB_COMB: 15.73%
+  CAT_COMB: 15.86%
+
+--- Ensembles ---
+  Ensemble (Robust MFCC only): 15.48%
+  Ensemble (Robust LFCC only): 17.16%
+  Ensemble (Robust Combined only): 15.57%
+  Optimized Weighted Ensemble (0.5 MFCC + 0.5 COMB): 15.12%
+  Calibrated Stacking Meta-Classifier: 15.34%

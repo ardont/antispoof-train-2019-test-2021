@@ -15,8 +15,8 @@ from utils.metrics import compute_eer
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Train MLP Classifier on Robust Features")
-    parser.add_argument("--feature", type=str, default="mfcc", choices=["mfcc", "lfcc", "combined"],
-                        help="Feature type to use: mfcc, lfcc or combined")
+    parser.add_argument("--feature", type=str, default="mfcc", choices=["mfcc", "lfcc", "cqcc", "combined"],
+                        help="Feature type to use: mfcc, lfcc, cqcc or combined")
     parser.add_argument("--subset", action="store_true", help="Run in subset mode for fast verification")
     args = parser.parse_args()
     

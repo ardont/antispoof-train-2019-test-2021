@@ -51,6 +51,14 @@ data_payload.zip
 !scaler.pkl
 !scaler_lfcc.pkl
 
+!lgb_model_*_robust.pkl
+!xgb_model_*_robust.json
+!cat_model_*_robust.cbm
+!mlp_model_*_robust.pkl
+!stacking_meta_model.pkl
+!scaler_*_robust.pkl
+!best_lfcc_params.pkl
+
 data_cache.pkl
 
 # IDEs

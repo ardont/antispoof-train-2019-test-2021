@@ -10,3 +10,8 @@ matplotlib
 tqdm
 tensorboard
 streamlit
+xgboost
+lightgbm
+catboost
+optuna
+pyyaml
