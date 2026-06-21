@@ -28,6 +28,13 @@ if "%1"=="--subset" (
 
 :: Unpack data if needed
 echo [1/6] Preparing and checking training data...
+if not exist data\2019\LA.zip (
+    if not exist data\2019\LA\ASVspoof2019_LA_train (
+        echo [WARNING] Training data archive 'data\2019\LA.zip' not found!
+        echo [INFO] Running 'download_data.bat' to download it...
+        call download_data.bat
+    )
+)
 python scripts/prepare_data.py --train
 if %errorlevel% neq 0 (
     echo [ERROR] Training data extraction failed!

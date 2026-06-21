@@ -15,6 +15,20 @@ call venv\Scripts\activate
 
 :: Unpack data if needed
 echo [1/2] Preparing and checking evaluation data...
+if not exist data\2021\ASVspoof2021_LA_eval.tar.gz (
+    if not exist data\2021\ASVspoof2021_LA_eval\flac (
+        echo [WARNING] Evaluation data archive 'data\2021\ASVspoof2021_LA_eval.tar.gz' not found!
+        echo [INFO] Running 'download_data.bat' to download it...
+        call download_data.bat
+    )
+)
+if not exist data\2021\LA-keys-full.tar.gz (
+    if not exist data\2021\keys\LA (
+        echo [WARNING] Evaluation keys archive 'data\2021\LA-keys-full.tar.gz' not found!
+        echo [INFO] Running 'download_data.bat' to download it...
+        call download_data.bat
+    )
+)
 python scripts/prepare_data.py --eval
 if %errorlevel% neq 0 (
     echo [ERROR] Evaluation data extraction failed!
